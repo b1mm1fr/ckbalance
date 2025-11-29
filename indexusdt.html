@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>SALDO CHANGEKEYS USDT (Polygon)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Font (opzionale) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --violet-dark: #0b0216;
+      --violet-main: #7c3aed;
+      --violet-soft: #a855f7;
+      --violet-neon: #c4b5fd;
+      --danger: #f97373;
+      --success: #4ade80;
+      --text-main: #f9f5ff;
+      --text-muted: #c4b5fd;
+      --border-glow: rgba(168, 85, 247, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top left, #3b0764 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+      overflow: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 999px;
+      filter: blur(120px);
+      opacity: 0.9;
+      z-index: -2;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    body::before {
+      background: radial-gradient(circle, #7c3aed, transparent 60%);
+      top: -100px;
+      left: -120px;
+      animation: glowMove1 18s infinite alternate ease-in-out;
+    }
+
+    body::after {
+      background: radial-gradient(circle, #a855f7, transparent 60%);
+      bottom: -140px;
+      right: -100px;
+      animation: glowMove2 22s infinite alternate ease-in-out;
+    }
+
+    @keyframes glowMove1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(80px, 40px) scale(1.2); }
+    }
+
+    @keyframes glowMove2 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-60px, -20px) scale(1.15); }
+    }
+
+    .app {
+      width: min(480px, 100%);
+      padding: 24px 20px;
+      position: relative;
+    }
+
+    .card {
+      position: relative;
+      padding: 24px 20px 22px;
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.25), rgba(15, 23, 42, 0.9));
+      box-shadow:
+        0 0 0 1px rgba(148, 163, 184, 0.08),
+        0 25px 60px rgba(15, 23, 42, 0.8),
+        0 0 60px rgba(129, 140, 248, 0.4);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      padding: 1px;
+      background: conic-gradient(
+        from 0deg,
+        rgba(168, 85, 247, 0.1),
+        rgba(129, 140, 248, 0.7),
+        rgba(244, 114, 182, 0.7),
+        rgba(129, 140, 248, 0.7),
+        rgba(168, 85, 247, 0.1)
+      );
+      mask: linear-gradient(#000 0 0) content-box,
+            linear-gradient(#000 0 0);
+      -webkit-mask: linear-gradient(#000 0 0) content-box,
+            linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+      opacity: 0.8;
+      animation: borderSpin 14s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes borderSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(129, 140, 248, 0.7);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--success);
+      box-shadow: 0 0 12px rgba(74, 222, 128, 0.8);
+    }
+
+    .subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .status {
+      min-height: 18px;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .status--error {
+      color: var(--danger);
+    }
+
+    .status--ok {
+      color: var(--success);
+    }
+
+    .status span.dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 4px;
+      background: currentColor;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .balances-wrapper {
+      border-radius: 18px;
+      padding: 16px 14px 12px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(30, 64, 175, 0.2));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow:
+        inset 0 0 24px rgba(15, 23, 42, 0.85),
+        0 0 32px rgba(56, 189, 248, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balances-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background:
+        radial-gradient(circle at 10% 0, rgba(248, 250, 252, 0.08), transparent 40%),
+        radial-gradient(circle at 100% 120%, rgba(192, 132, 252, 0.25), transparent 55%);
+      opacity: 0.7;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .balances-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .balances-header-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--violet-neon);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .tag-pill {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #f97316, #a855f7);
+      box-shadow:
+        0 0 8px rgba(249, 115, 22, 0.9),
+        0 0 14px rgba(168, 85, 247, 0.95);
+    }
+
+    .balances-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 10px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .amount-block {
+      padding-right: 6px;
+    }
+
+    .amount-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .odometer {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 1.8rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      color: #fbbf24;
+      text-shadow:
+        0 0 12px rgba(250, 204, 21, 0.9),
+        0 0 24px rgba(245, 158, 11, 0.7);
+      display: inline-flex;
+      align-items: baseline;
+      white-space: nowrap;
+    }
+
+    .odometer small {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-left: 4px;
+    }
+
+    .currency-block {
+      text-align: right;
+      padding-left: 6px;
+      border-left: 1px dashed rgba(148, 163, 184, 0.4);
+    }
+
+    .currency-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .odometer--eur {
+      font-size: 1.35rem;
+      color: #a5b4fc;
+      text-shadow:
+        0 0 12px rgba(129, 140, 248, 1),
+        0 0 28px rgba(129, 140, 248, 0.9);
+    }
+
+    .meta-row {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta-row span.accent {
+      color: var(--violet-neon);
+    }
+
+    .meta-row span.source {
+      opacity: 0.9;
+    }
+
+    .meta-row span.api-pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .float-anim {
+      animation: float 9s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 20px 16px 18px;
+      }
+
+      .balances-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .currency-block {
+        text-align: left;
+        border-left: none;
+        border-top: 1px dashed rgba(148, 163, 184, 0.4);
+        padding-left: 0;
+        padding-top: 8px;
+        margin-top: 4px;
+      }
+
+      .odometer {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="card">
+      <div class="card-inner">
+        <div class="title-row">
+          <h1>SALDO CHANGEKEYS USDT (Polygon)</h1>
+          <div class="pill">
+            <span class="pill-dot"></span>
+            Live Data
+          </div>
+        </div>
+
+        <p class="subtitle">
+          Saldo live dell'indirizzo USDT su Polygon di ChangeKeys, in USDT e in € con effetto odometro.
+        </p>
+
+        <div id="status" class="status">
+          <span class="dot"></span>
+          Caricamento saldo in corso…
+        </div>
+
+        <div class="balances-wrapper float-anim">
+          <div class="balances-header">
+            <span class="balances-header-title">Saldo indirizzo</span>
+            <span class="tag">
+              <span class="tag-pill"></span>
+              USDT → EUR
+            </span>
+          </div>
+
+          <div class="balances-grid">
+            <div class="amount-block">
+              <div class="amount-label">Saldo USDT</div>
+              <div class="odometer" id="usdt-counter" data-value="0">
+                0.00<small> USDT</small>
+              </div>
+            </div>
+
+            <div class="currency-block">
+              <div class="currency-label">Valore in Euro</div>
+              <div class="odometer odometer--eur" id="eur-counter" data-value="0">
+                0.00<small> EUR</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="meta-row">
+            <span class="source">
+              <span class="accent">Etherscan V2 (chainid 137)</span> (tokenbalance USDT) · <span class="accent">CoinGecko</span> (USDT/EUR)
+            </span>
+            <span class="api-pill">Aggiornamento on-load</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ==========================
+    // CONFIG
+    // ==========================
+
+    // Indirizzo wallet su Polygon da monitorare
+    const PRESET_ADDRESS = "0xe5bC8292d661E391A5B2894189D1A2BDDd471E40";
+
+    // API key Etherscan V2 (la tua)
+    const ETHERSCAN_API_KEY = "7SIWP6S4XRW9P31XKUSIGYPQ2TMIGGT7G3";
+
+    // Base path Etherscan API V2 (multichain)
+    const ETHERSCAN_BASE = "https://api.etherscan.io/v2/api";
+
+    // Contract address USDT su Polygon (ufficiale)
+    const USDT_POLYGON_CONTRACT = "0xc2132D05D31c914A87C6611C10748AEb04B58e8F";
+
+    // USDT su Polygon ha 6 decimali
+    const USDT_DECIMALS = 6;
+
+    // Endpoint prezzo USDT → EUR da CoinGecko
+    const COINGECKO_USDT_EUR =
+      "https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=eur";
+
+    const statusEl = document.getElementById("status");
+    const usdtCounterEl = document.getElementById("usdt-counter");
+    const eurCounterEl = document.getElementById("eur-counter");
+
+    function animateCounter(el, targetVal, decimals) {
+      const duration = 1200;
+      const startVal = parseFloat(el.dataset.value || "0") || 0;
+      const startTime = performance.now();
+      const diff = targetVal - startVal;
+
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      function frame(now) {
+        const elapsed = now - startTime;
+        const t = Math.min(1, elapsed / duration);
+        const eased = easeOutCubic(t);
+        const currentVal = startVal + diff * eased;
+        const formatted = currentVal.toFixed(decimals);
+
+        el.dataset.value = currentVal.toString();
+
+        if (el === usdtCounterEl) {
+          el.innerHTML = `${formatted}<small> USDT</small>`;
+        } else if (el === eurCounterEl) {
+          el.innerHTML = `${formatted}<small> EUR</small>`;
+        }
+
+        if (t < 1) {
+          requestAnimationFrame(frame);
+        }
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    // Ottiene il saldo USDT (Polygon) per un address usando Etherscan API V2 (chainid=137)
+    async function fetchUsdtPolygonBalance(address) {
+      const url =
+        ETHERSCAN_BASE +
+        "?chainid=137" +
+        "&module=account" +
+        "&action=tokenbalance" +
+        "&contractaddress=" + encodeURIComponent(USDT_POLYGON_CONTRACT) +
+        "&address=" + encodeURIComponent(address.trim()) +
+        "&tag=latest" +
+        "&apikey=" + encodeURIComponent(ETHERSCAN_API_KEY);
+
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error("Impossibile ottenere il saldo USDT da Etherscan V2.");
+      }
+
+      const data = await res.json();
+
+      if (!data || data.status !== "1" || typeof data.result !== "string") {
+        throw new Error("Risposta Etherscan V2 non valida o errore API.");
+      }
+
+      const raw = data.result; // stringa di intero
+      const bigIntVal = BigInt(raw);
+      const divisor = BigInt(10) ** BigInt(USDT_DECIMALS);
+      const whole = Number(bigIntVal / divisor);
+      const remainder = Number(bigIntVal % divisor);
+
+      const fractionalStr = remainder
+        .toString()
+        .padStart(USDT_DECIMALS, "0")
+        .replace(/0+$/, "");
+      const finalStr =
+        fractionalStr.length > 0 ? `${whole}.${fractionalStr}` : `${whole}`;
+
+      return parseFloat(finalStr);
+    }
+
+    async function fetchUsdtEurRate() {
+      const res = await fetch(COINGECKO_USDT_EUR);
+      if (!res.ok) {
+        throw new Error("Impossibile ottenere il prezzo USDT/EUR da CoinGecko.");
+      }
+      const data = await res.json();
+      const rate = data?.tether?.eur;
+      if (typeof rate !== "number") {
+        throw new Error("Risposta di CoinGecko non valida.");
+      }
+      return rate;
+    }
+
+    async function updateForAddress(address) {
+      if (!address || !address.trim()) {
+        statusEl.className = "status status--error";
+        statusEl.innerHTML = `<span class="dot"></span>Errore configurazione indirizzo.`;
+        return;
+      }
+
+      statusEl.className = "status";
+      statusEl.innerHTML = `<span class="dot"></span>Caricamento saldo in corso…`;
+
+      try {
+        const [usdtBalance, rate] = await Promise.all([
+          fetchUsdtPolygonBalance(address),
+          fetchUsdtEurRate()
+        ]);
+
+        const eurValue = usdtBalance * rate;
+
+        const usdtDecimalsToShow = 2;
+        const eurDecimalsToShow = 2;
+
+        animateCounter(usdtCounterEl, usdtBalance, usdtDecimalsToShow);
+        animateCounter(eurCounterEl, eurValue, eurDecimalsToShow);
+
+        statusEl.className = "status status--ok";
+        statusEl.innerHTML = `<span class="dot"></span>Saldo aggiornato.`;
+      } catch (err) {
+        console.error(err);
+        statusEl.className = "status status--error";
+        statusEl.innerHTML =
+          `<span class="dot"></span>Errore durante il recupero dati. Controlla API key e indirizzo e riprova.`;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateForAddress(PRESET_ADDRESS);
+    });
+  </script>
+</body>
+</html>

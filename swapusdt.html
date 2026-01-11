@@ -247,7 +247,7 @@
     timer = setTimeout(async () => {
       const fx = await getUsdToEur();
 
-      const netChf = floor2(chf * (1 - FEE));
+      const netChf = floor2(chf * (1 - FEE) - 0.1);
       const usdt = floor2(netChf * RATE);
       const eur = floor2(usdt * fx);
 
@@ -259,3 +259,4 @@
 
 </body>
 </html>
+

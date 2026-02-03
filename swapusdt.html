@@ -190,7 +190,7 @@
   </div>
 
   <div class="rate">
-    Rata: <b>10%</b> + <b>1.17 USDT/CHF</b> -> EUR - <b>EUR0.10 (Spread Polygon)</b>
+    Rata: <b>10%</b> + <b>1.17 USDT/CHF</b> -> EUR
   </div>
 
 </div>
@@ -247,7 +247,7 @@
     timer = setTimeout(async () => {
       const fx = await getUsdToEur();
 
-      const netChf = floor2(chf * (1 - FEE) - 0.1);
+      const netChf = floor2(chf * (1 - FEE));
       const usdt = floor2(netChf * RATE);
       const eur = floor2(usdt * fx);
 
@@ -259,6 +259,7 @@
 
 </body>
 </html>
+
 
 
 

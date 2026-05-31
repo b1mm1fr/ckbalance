@@ -222,14 +222,19 @@
   }
 
   async function getUsdToEur(){
-    if(usdToEur) return usdToEur;
-    const res = await fetch(
-      'https://api.frankfurter.app/latest?from=USD&to=EUR'
-    );
-    const data = await res.json();
-    usdToEur = data.rates.EUR;
-    return usdToEur;
-  }
+	  if(usdToEur) return usdToEur;
+	
+	  const res = await fetch(
+	    'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json'
+	  );
+	  if (!res.ok) {
+	    throw new Error(`FX request failed: ${res.status} ${res.statusText}`);
+	  }
+	
+	  const data = await res.json();
+	  usdToEur = data.usd.eur;
+	  return usdToEur;
+	}
 
   chfInput.addEventListener('input', () => {
     clearTimeout(timer);
